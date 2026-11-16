@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Binaries (compiled on target machine via install.sh)
+telegram/bin/sync-tdata-keys
+
+# Logs & temp files
+*.log
+.DS_Store
+*.tmp

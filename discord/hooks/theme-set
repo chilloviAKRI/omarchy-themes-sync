@@ -1,0 +1,5 @@
+#!/bin/bash
+# omarchy hook: theme-set.d
+# Keeps Discord / Vencord in sync with the Omarchy theme.
+"$HOME/.config/omarchy/discord-theme/bin/sync.sh" "$1" &
+exit 0

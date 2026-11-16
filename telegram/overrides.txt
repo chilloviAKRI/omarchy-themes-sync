@@ -1,0 +1,18 @@
+# Overrides for frozen indicator colors (DARK_HEX LIGHT_HEX)
+#
+# Text selection in messages (macOS Selection Blue):
+#   Dark mode:  #0063e6 (with #ffffff text)
+#   Light mode: #b3d7ff (with #000000 text)
+
+msgInBgSelected: #0063e6 #b3d7ff
+msgOutBgSelected: #0063e6 #b3d7ff
+historyTextInFgSelected: #ffffff #000000
+historyTextOutFgSelected: #ffffff #000000
+historyLinkInFgSelected: #68b5ff #007aff
+historyLinkOutFgSelected: #ffffff #007aff
+msgInMonoFgSelected: #94cbff #0058d0
+msgOutMonoFgSelected: #94cbff #0058d0
+msgSelectOverlay: #0a84ff4c #007aff4c
+msgStickerOverlay: #0a84ff7f #007aff7f
+overviewPhotoSelectOverlay: #0a84ff40 #007aff40
+msgServiceBgSelected: #0063e6 #b3d7ff

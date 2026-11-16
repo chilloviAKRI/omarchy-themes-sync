@@ -1,0 +1,5 @@
+#!/bin/bash
+# omarchy hook: post-boot.d
+# Re-sync Spotify theme at login.
+"$HOME/.config/omarchy/spotify-theme/bin/sync.sh" &
+exit 0

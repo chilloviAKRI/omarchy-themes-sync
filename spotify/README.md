@@ -1,0 +1,44 @@
+# Omarchy Spotify Theme Synchronization (via Spicetify)
+
+Автоматическая синхронизация темы Spotify с текущей системной темой Omarchy через Spicetify.
+
+## Особенности
+
+- **Полная интеграция с Omarchy**: цвета основного экрана, левой боковой панели (библиотеки), нижней панели воспроизведения (Now Playing), карточек, кнопок, слайдеров, контекстных меню и уведомлений синхронизируются с активной темой Omarchy (`colors.toml`).
+- **macOS Blue Выделение Текста**: цвет выделения текста зафиксирован в классический синий цвет macOS (`#0063e6` с белым текстом `#ffffff`), как и в Telegram и Discord.
+- **Адаптивные элементы**: сердечки, галочки, свитчи, бейджи и кнопка воспроизведения принимают акцентный цвет темы Omarchy.
+- **Работа без sudo**: клиент Spotify изолирован в пользовательской директории `~/.local/share/spotify-client/`, что позволяет Spicetify патчить и применять темы без root-прав и не ломаться при системных обновлениях пакетов.
+- **Хуки Omarchy**: при вызове `omarchy theme set <имя>` срабатывает хук `theme-set.d/spotify-theme`, который мгновенно обновляет файлы темы Spicetify и применяет их.
+
+## Структура файлов
+
+```
+~/.config/omarchy/spotify-theme/
+├── bin/
+│   └── sync.sh               # Скрипт синхронизации темы
+├── hooks/
+│   ├── post-boot             # Хук при входе в систему
+│   └── theme-set             # Хук при смене темы Omarchy
+├── install.sh                # Установщик хуков и лаунчера
+├── omarchy-spotify-theme.py  # Генератор color.ini и user.css
+└── README.md
+```
+
+## Тема Spicetify
+
+Тема размещается в:
+`~/.config/spicetify/Themes/omarchy/`
+- `color.ini`
+- `user.css`
+
+## Установка и ручной запуск
+
+Для повторной синхронизации вручную:
+```bash
+~/.config/omarchy/spotify-theme/bin/sync.sh
+```
+
+Для переустановки хуков:
+```bash
+~/.config/omarchy/spotify-theme/install.sh
+```

@@ -1,0 +1,6 @@
+#!/bin/bash
+# omarchy hook: post-boot.d
+# Regenerate the theme file at login so AyuGram starts with the current
+# Omarchy palette even if the theme changed while the app was closed.
+"$HOME/.config/omarchy/telegram-theme/bin/sync.sh" &
+exit 0

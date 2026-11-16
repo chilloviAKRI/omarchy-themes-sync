@@ -1,0 +1,5 @@
+#!/bin/bash
+# omarchy hook: post-boot.d
+# Regenerates Discord theme on login so Discord / Vencord starts with the current Omarchy palette.
+"$HOME/.config/omarchy/discord-theme/bin/sync.sh" &
+exit 0
