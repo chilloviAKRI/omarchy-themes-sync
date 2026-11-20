@@ -184,13 +184,9 @@ def build_user_css(palette: dict[str, str], theme_name: str) -> str:
 
     # HIGH-CONTRAST PLAYER CONTROLS & PLAY BUTTON COLORS
     if is_dark:
-        play_bar_circle_bg = "#ffffff"
-        play_bar_circle_hover = "#f0f0f0"
         control_btn_fg = light_fg if light_fg else "#d8dee9"
         control_btn_hover_fg = bright_fg if bright_fg else "#ffffff"
     else:
-        play_bar_circle_bg = fg if fg else "#181818"
-        play_bar_circle_hover = f"#{adjust_lightness(clean_hex(play_bar_circle_bg), 0.15)}"
         control_btn_fg = light_fg if light_fg else "#403E3C"
         control_btn_hover_fg = fg if fg else "#101010"
 
@@ -447,18 +443,19 @@ div[data-testid="now-playing-bar"] {{
 
 /* ==========================================================================
    Play / Pause Button (Bottom Player Bar)
-   Circle background contrasts with player bar;
-   Icon matches Spotify player background as requested by user.
+   Synchronized dynamically with Omarchy themes:
+   Circle background takes active theme accent;
+   Icon inside matches Spotify player background color.
    ========================================================================== */
 button[data-testid="control-button-playpause"],
 button[data-testid="control-button-playpause"] > span,
 button[data-testid="control-button-playpause"] [class*="button-primary__inner"],
 button[data-testid="control-button-playpause"] [class*="ButtonInner"],
 .main-playPauseButton-button {{
-    background-color: {play_bar_circle_bg} !important;
-    --background-base: {play_bar_circle_bg} !important;
-    --background-highlight: {play_bar_circle_hover} !important;
-    --background-press: {play_bar_circle_hover} !important;
+    background-color: var(--omarchy-accent) !important;
+    --background-base: var(--omarchy-accent) !important;
+    --background-highlight: var(--omarchy-accent-hover) !important;
+    --background-press: var(--omarchy-accent-active) !important;
     border-radius: 50% !important;
     transition: transform 0.15s ease, background-color 0.15s ease !important;
 }}
@@ -468,12 +465,21 @@ button[data-testid="control-button-playpause"]:hover > span,
 button[data-testid="control-button-playpause"]:hover [class*="button-primary__inner"],
 button[data-testid="control-button-playpause"]:hover [class*="ButtonInner"],
 .main-playPauseButton-button:hover {{
-    background-color: {play_bar_circle_hover} !important;
+    background-color: var(--omarchy-accent-hover) !important;
 }}
 
 button[data-testid="control-button-playpause"]:hover,
 .main-playPauseButton-button:hover {{
     transform: scale(1.06) !important;
+}}
+
+button[data-testid="control-button-playpause"]:active,
+button[data-testid="control-button-playpause"]:active > span,
+button[data-testid="control-button-playpause"]:active [class*="button-primary__inner"],
+button[data-testid="control-button-playpause"]:active [class*="ButtonInner"],
+.main-playPauseButton-button:active {{
+    background-color: var(--omarchy-accent-active) !important;
+    transform: scale(0.98) !important;
 }}
 
 /* Icon inside play/pause circle: EXACT MATCH with Spotify player background */
