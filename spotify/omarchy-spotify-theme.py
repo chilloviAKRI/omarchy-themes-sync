@@ -166,6 +166,7 @@ def build_user_css(palette: dict[str, str], theme_name: str) -> str:
     fg = palette["foreground"]
     bright_fg = palette["bright_foreground"]
     light_fg = palette["light_foreground"]
+    dark_fg = palette["dark_foreground"]
     muted = palette["muted"]
     is_dark = palette["mode"] != "light"
 
@@ -180,6 +181,18 @@ def build_user_css(palette: dict[str, str], theme_name: str) -> str:
     # HIGH-CONTRAST SLIDER COLORS
     track_bg = "rgba(255, 255, 255, 0.22)" if is_dark else "rgba(0, 0, 0, 0.18)"
     track_hover_bg = "rgba(255, 255, 255, 0.32)" if is_dark else "rgba(0, 0, 0, 0.28)"
+
+    # HIGH-CONTRAST PLAYER CONTROLS & PLAY BUTTON COLORS
+    if is_dark:
+        play_bar_circle_bg = "#ffffff"
+        play_bar_circle_hover = "#f0f0f0"
+        control_btn_fg = light_fg if light_fg else "#d8dee9"
+        control_btn_hover_fg = bright_fg if bright_fg else "#ffffff"
+    else:
+        play_bar_circle_bg = fg if fg else "#181818"
+        play_bar_circle_hover = f"#{adjust_lightness(clean_hex(play_bar_circle_bg), 0.15)}"
+        control_btn_fg = light_fg if light_fg else "#403E3C"
+        control_btn_hover_fg = fg if fg else "#101010"
 
     css = f"""/* ==========================================================================
    Omarchy Theme for Spotify (Spicetify)
@@ -432,30 +445,168 @@ div[data-testid="now-playing-bar"] {{
     border-top: 1px solid var(--omarchy-border) !important;
 }}
 
-/* Play / Pause Buttons (Bottom Bar & Main Area) */
+/* ==========================================================================
+   Play / Pause Button (Bottom Player Bar)
+   Circle background contrasts with player bar;
+   Icon matches Spotify player background as requested by user.
+   ========================================================================== */
+button[data-testid="control-button-playpause"],
+button[data-testid="control-button-playpause"] > span,
+button[data-testid="control-button-playpause"] [class*="button-primary__inner"],
+button[data-testid="control-button-playpause"] [class*="ButtonInner"],
+.main-playPauseButton-button {{
+    background-color: {play_bar_circle_bg} !important;
+    --background-base: {play_bar_circle_bg} !important;
+    --background-highlight: {play_bar_circle_hover} !important;
+    --background-press: {play_bar_circle_hover} !important;
+    border-radius: 50% !important;
+    transition: transform 0.15s ease, background-color 0.15s ease !important;
+}}
+
+button[data-testid="control-button-playpause"]:hover,
+button[data-testid="control-button-playpause"]:hover > span,
+button[data-testid="control-button-playpause"]:hover [class*="button-primary__inner"],
+button[data-testid="control-button-playpause"]:hover [class*="ButtonInner"],
+.main-playPauseButton-button:hover {{
+    background-color: {play_bar_circle_hover} !important;
+}}
+
+button[data-testid="control-button-playpause"]:hover,
+.main-playPauseButton-button:hover {{
+    transform: scale(1.06) !important;
+}}
+
+/* Icon inside play/pause circle: EXACT MATCH with Spotify player background */
+button[data-testid="control-button-playpause"] svg,
+button[data-testid="control-button-playpause"] svg *,
+button[data-testid="control-button-playpause"] [data-encore-id="icon"] svg,
+button[data-testid="control-button-playpause"] [data-encore-id="icon"] svg *,
+.main-playPauseButton-button svg,
+.main-playPauseButton-button svg * {{
+    fill: var(--spice-player) !important;
+    color: var(--spice-player) !important;
+    --text-base: var(--spice-player) !important;
+    --essential-base: var(--spice-player) !important;
+}}
+
+/* Page Play Buttons (Playlists, Albums, Artists, Card hover) */
 .main-playButton-PlayButton,
 button[data-testid="play-button"],
-button[data-testid="control-button-playpause"],
-.main-playPauseButton-button,
 .main-playButton-primary {{
     background-color: var(--spice-button) !important;
-    color: #ffffff !important;
+    --background-base: var(--spice-button) !important;
+    --background-highlight: var(--spice-button-active) !important;
+    border-radius: 50% !important;
+    transition: transform 0.15s ease, background-color 0.15s ease !important;
 }}
-.main-playButton-PlayButton svg,
-button[data-testid="play-button"] svg,
-button[data-testid="control-button-playpause"] svg,
-.main-playPauseButton-button svg,
-.main-playButton-primary svg {{
-    fill: #ffffff !important;
-    color: #ffffff !important;
-}}
+
 .main-playButton-PlayButton:hover,
 button[data-testid="play-button"]:hover,
-button[data-testid="control-button-playpause"]:hover,
-.main-playPauseButton-button:hover,
 .main-playButton-primary:hover {{
     background-color: var(--spice-button-active) !important;
-    transform: scale(1.04);
+    transform: scale(1.05) !important;
+}}
+
+/* Icon inside page play buttons: matches Spotify main content background */
+.main-playButton-PlayButton svg,
+.main-playButton-PlayButton svg *,
+button[data-testid="play-button"] svg,
+button[data-testid="play-button"] svg *,
+.main-playButton-primary svg,
+.main-playButton-primary svg * {{
+    fill: var(--spice-main) !important;
+    color: var(--spice-main) !important;
+    --text-base: var(--spice-main) !important;
+    --essential-base: var(--spice-main) !important;
+}}
+
+/* ==========================================================================
+   Player Control Buttons (Shuffle, Skip Back/Forward, Repeat, Right Bar)
+   High contrast, clearly visible on all themes, vivid active states.
+   ========================================================================== */
+
+/* 1. Inactive / default state: high contrast, no dark blending */
+div[data-testid="player-controls"] button:not([data-testid="control-button-playpause"]),
+.player-controls__buttons button:not([data-testid="control-button-playpause"]),
+.main-nowPlayingBar-right button,
+.main-nowPlayingBar-left button:not(.main-addButton-button) {{
+    color: {control_btn_fg} !important;
+    opacity: 0.85 !important;
+    transition: color 0.15s ease, opacity 0.15s ease, transform 0.15s ease !important;
+}}
+
+div[data-testid="player-controls"] button:not([data-testid="control-button-playpause"]) svg,
+.player-controls__buttons button:not([data-testid="control-button-playpause"]) svg,
+.main-nowPlayingBar-right button svg,
+.main-nowPlayingBar-left button:not(.main-addButton-button) svg {{
+    fill: currentColor !important;
+    color: currentColor !important;
+}}
+
+/* 2. Hover state: bright, 100% opacity, subtle scale */
+div[data-testid="player-controls"] button:not([data-testid="control-button-playpause"]):hover:not(:disabled),
+.player-controls__buttons button:not([data-testid="control-button-playpause"]):hover:not(:disabled),
+.main-nowPlayingBar-right button:hover:not(:disabled),
+.main-nowPlayingBar-left button:not(.main-addButton-button):hover:not(:disabled) {{
+    color: {control_btn_hover_fg} !important;
+    opacity: 1.0 !important;
+    transform: scale(1.08) !important;
+}}
+
+/* 3. Active / toggled buttons (Shuffle ON, Repeat ON, Repeat Track, Lyrics, Queue, etc.) */
+button[data-testid="control-button-shuffle"][aria-checked="true"],
+button[data-testid="control-button-repeat"][aria-checked="true"],
+button[data-testid="control-button-repeat"][aria-checked="mixed"],
+button[data-testid="lyrics-button"][aria-expanded="true"],
+button[data-testid="control-button-npv"][aria-expanded="true"],
+button[data-testid="control-button-queue"][aria-expanded="true"],
+.main-nowPlayingBar-right button[aria-expanded="true"],
+button[data-testid="add-button"][aria-checked="true"],
+button.main-addButton-button[aria-checked="true"],
+button.main-addButton-active {{
+    color: var(--omarchy-accent) !important;
+    opacity: 1.0 !important;
+}}
+
+button[data-testid="control-button-shuffle"][aria-checked="true"]:hover,
+button[data-testid="control-button-repeat"][aria-checked="true"]:hover,
+button[data-testid="control-button-repeat"][aria-checked="mixed"]:hover,
+button[data-testid="lyrics-button"][aria-expanded="true"]:hover,
+button[data-testid="control-button-npv"][aria-expanded="true"]:hover,
+button[data-testid="control-button-queue"][aria-expanded="true"]:hover,
+.main-nowPlayingBar-right button[aria-expanded="true"]:hover,
+button[data-testid="add-button"][aria-checked="true"]:hover {{
+    color: var(--omarchy-accent-hover) !important;
+    opacity: 1.0 !important;
+    transform: scale(1.08) !important;
+}}
+
+/* Active dot indicator under Shuffle & Repeat buttons */
+.KIr7xb8M8kwrXLA0Myzy:before,
+.GRt7501sdglGEjReOsjn:before,
+button[data-testid="control-button-shuffle"][aria-checked="true"]::after,
+button[data-testid="control-button-repeat"][aria-checked="true"]::after,
+button[data-testid="control-button-repeat"][aria-checked="mixed"]::after {{
+    background-color: var(--omarchy-accent) !important;
+}}
+
+/* 4. Disabled buttons (e.g. Prev at first track) */
+div[data-testid="player-controls"] button:disabled,
+.player-controls__buttons button:disabled,
+.main-nowPlayingBar-right button:disabled {{
+    opacity: 0.28 !important;
+    color: var(--omarchy-muted) !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}}
+
+/* 5. Timestamps */
+.playback-bar__progress-time,
+div[data-testid="playback-position"],
+div[data-testid="playback-duration"] {{
+    color: {control_btn_fg} !important;
+    font-size: 0.75rem !important;
+    opacity: 0.85 !important;
 }}
 
 /* ==========================================================================
