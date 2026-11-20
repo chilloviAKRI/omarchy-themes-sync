@@ -15,6 +15,8 @@
 - 💎 **macOS Blue Selection**: Unified native-feel selection indicator (`#0063e6` with `#ffffff` text) across all platforms.
 - 🎵 **Spotify Clean UX**:
   - Distinguishable, high-contrast track & volume slider bars.
+  - Dynamic theme-synced Play/Pause button with background-matched cutout icon.
+  - Enhanced contrast and distinct hover/active states for all player controls (shuffle, repeat, prev, next, lyrics, queue).
   - Eliminated distracting slider thumb ball for a minimalist, modern aesthetic.
   - Custom light theme overrides for navigation buttons, search pills, filter chips, right-sidebar NowPlaying cards, and dynamic playlist header contrast.
 - 📱 **Telegram Dual-Mode Integration**: Generates single unified `.tdesktop-theme` package syncing both Day and Night modes with running system colors.
